@@ -10,7 +10,7 @@ As of the time of writing (April 2024) Helldivers 2 does not seem to play nicely
 3. Run **First run.bat** as Administrator.
 4. When launching the game in future, use the **HELLDIVERS™ 2 (IPv4)** shortcut on your desktop
 
-N.B - If you need to recreate the shortcut (e.g. if you move the location of the script) simply go back to step 2 to re-create the shortcut.
+N.B - If you need to recreate the shortcut (e.g. if you move the location of the script) simply go back to step 3 to re-create the shortcut.
 
 ### What does this script do?
 1. On first run, providing you use the included bat file or manually pass the `-firstRun` switch, it will create a shortcut to this script on your desktop. The shortcut will be set to run the script (and launch the game) as Administrator with `-ExecutionPolicy Bypass`. Administrative access is required to toggle IPv6 on your network adapter.
