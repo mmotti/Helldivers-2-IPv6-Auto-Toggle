@@ -70,6 +70,11 @@ Function New-Shortcut {
     }
 }
 
+# Process options
+$processPath = "steam://rungameid/553850"
+$processTimeout = 15
+$monitoredProcess = 'helldivers2'
+
 # Check for Administrator
 # and exit if necessary
 if (!([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::
@@ -97,11 +102,7 @@ if ($activeNetworkAdapter -and $activeNetworkAdapter -isnot [array]) {
 
         # Launch the game
         Write-Host 'Launching Helldivers 2...'
-        Start-Process -FilePath "steam://rungameid/553850"
-
-        # Process options
-        $processTimeout = 15
-        $monitoredProcess = 'helldivers2'
+        Start-Process $processPath
         
        # Keep checking until we detect that the game has launched
        # with a timeout
