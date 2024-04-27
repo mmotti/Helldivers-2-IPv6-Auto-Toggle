@@ -79,9 +79,8 @@ if ($firstRun) {
 Write-Host 'Searching for an active Network Adapter...'
 $activeNetworkAdapter = Get-NetAdapter | Where-Object {$_.Status -eq "Up"}
 
-# Check we're not seeing >1 active network adapter
-# Count is only returned if there are 0 or >1 adapters returned
-if ($activeNetworkAdapter -and !$activeNetworkAdapter.Count) {
+# Check that we receive a single active Network Adapter and not an array of > 1
+if ($activeNetworkAdapter -and $activeNetworkAdapter -isnot [array]) {
    
     Write-Host "Network Adapter found: $($activeNetworkAdapter.Name)" -ForegroundColor Green
     
@@ -119,7 +118,7 @@ if ($activeNetworkAdapter -and !$activeNetworkAdapter.Count) {
 
         #Wait for the game to exit
         Write-Host 'Waiting for process to exit...'
-        Get-Process -Name $gameProcessName -ErrorAction SilentlyContinue | Wait-Process
+        $gameProcess | Wait-Process
 
         Write-Host 'Cleaning up...'
 
