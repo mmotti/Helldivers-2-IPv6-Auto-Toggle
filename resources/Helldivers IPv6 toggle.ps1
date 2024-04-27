@@ -118,7 +118,7 @@ if ($activeNetworkAdapter -and $activeNetworkAdapter -isnot [array]) {
 
         #Wait for the game to exit
         Write-Host 'Waiting for process to exit...'
-        Get-Process -Name $gameProcessName -ErrorAction SilentlyContinue | Wait-Process
+        $gameProcess | Wait-Process
 
         Write-Host 'Cleaning up...'
 
