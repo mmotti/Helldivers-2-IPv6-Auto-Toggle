@@ -29,26 +29,19 @@ Function Set-IPv6 {
     }
 }
 
-# Check for Administrator
-# and exit if necessary
-if (!([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::
-        GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) {
-    Write-Host 'Administrator privileges are required to change the state of IPv6.' -ForegroundColor Red
-    Write-Host 'Please re-run the script as Administrator' -ForegroundColor Red
-    Start-Sleep -Seconds 5
-    Exit
-}
+Function New-Shortcut {
+    param (
+        [Parameter(Mandatory=$false)]
+        $icon
+    )
 
-# We'll create a desktop shortcut on first run as it's not particularly straight forward for
-# end-users to create shortcuts for PowerShell scripts especially if they require
-# admin rights.
+    # This doesn't necessarily need to be within a function however it makes the code a little neater.
 
-if ($firstRun) {
     try {
         Write-Host 'Creating desktop shortcut...'
 
         # Construct destination (desktop)
-        $scriptPath = $MyInvocation.MyCommand.Definition
+        $scriptPath = $PSCommandPath
         $desktopPath = [Environment]::GetFolderPath("Desktop")
         $shortcutPath = Join-Path $desktopPath 'HELLDIVERS™ 2 (IPv4).lnk'
         # Start constructing the shortcut
@@ -56,7 +49,9 @@ if ($firstRun) {
         $shortcut = $shell.CreateShortcut($shortcutPath)
         $shortcut.TargetPath = "$([Environment]::GetFolderPath('System'))\WindowsPowerShell\v1.0\powershell.exe"
         $shortcut.Arguments = "-ExecutionPolicy Bypass -File `"$scriptPath`""
-        $shortcut.IconLocation = Join-Path (Split-Path $scriptPath) 'bc677582e8f758a167e84be4becc7475bbc82906.ico'
+        if ($icon) {
+            $shortcut.IconLocation = $icon
+        }
         $shortcut.WorkingDirectory = Split-Path $scriptPath
         $shortcut.Save()
 
@@ -72,7 +67,18 @@ if ($firstRun) {
         # If we get here somehow we won't end the script as it's not critical
         # just makes life easier
         Write-Host 'Something went wrong when trying to create a desktop shortcut' -ForegroundColor Red
+        Write-Host $_.Exception.Message
     }
+}
+
+# Check for Administrator
+# and exit if necessary
+if (!([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::
+        GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) {
+    Write-Host 'Administrator privileges are required to change the state of IPv6.' -ForegroundColor Red
+    Write-Host 'Please re-run the script as Administrator' -ForegroundColor Red
+    Start-Sleep -Seconds 5
+    Exit
 }
 
 # Get the active network adapter
@@ -115,6 +121,18 @@ if ($activeNetworkAdapter -and $activeNetworkAdapter -isnot [array]) {
         While ($null -eq $gameProcess)
 
         Write-Host "Game launched" -ForegroundColor Green
+
+
+        # We'll create a desktop shortcut for the script on first run as it's not particularly 
+        # straight forward for end-users to create shortcuts for PowerShell scripts especially if they require
+        # admin rights.
+
+        # Calling it here allows us to only create a shortcut if the script is relevant to the user (IPv6 is enabled)
+        # and means that we can grab the icon directly from the game process.
+
+        if ($firstRun) {
+            New-Shortcut -icon $gameProcess.Path
+        }
 
         #Wait for the game to exit
         Write-Host 'Waiting for process to exit...'
