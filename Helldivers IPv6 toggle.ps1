@@ -73,7 +73,7 @@ Function New-Shortcut {
 # Process options
 $processPath = "steam://rungameid/553850"
 $processTimeout = 15
-$monitoredProcess = 'helldivers2'
+$processMonitored = 'helldivers2'
 
 # Check for Administrator
 # and exit if necessary
@@ -109,7 +109,7 @@ if ($activeNetworkAdapter -and $activeNetworkAdapter -isnot [array]) {
        $elapsedTime = 0
         
         Do { 
-            $processObject = Get-Process $monitoredProcess -ErrorAction SilentlyContinue
+            $processObject = Get-Process $processMonitored -ErrorAction SilentlyContinue
             if ($elapsedTime -eq $processTimeout) {
                 Write-Host 'Something went wrong whilst attempting to launch the process' -ForegroundColor Red
                 Set-IPv6 -networkAdapter $activeNetworkAdapter -Enable $true
