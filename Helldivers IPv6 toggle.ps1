@@ -6,7 +6,7 @@
 Function Set-IPv6 {
     param (
         [Parameter(Mandatory=$true)]
-        $NetworkAdapter,
+        $networkAdapter,
 
         [Parameter(Mandatory=$true)]
         [bool]
@@ -16,11 +16,11 @@ Function Set-IPv6 {
     # This function will enable or disable IPv6 depending on the state of the $Enable bool
     # Admin access is required to be able to change this setting
     Try {
-        $activeNetworkAdapter | Set-NetAdapterBinding -ComponentID ms_tcpip6 -Enabled $Enable -ErrorAction Stop
+        $networkAdapter | Set-NetAdapterBinding -ComponentID ms_tcpip6 -Enabled $Enable -ErrorAction Stop
         if ($Enable) {
-            Write-Host "IPv6 successfully enabled for $($activeNetworkAdapter.Name)" -ForegroundColor Green
+            Write-Host "IPv6 successfully enabled for $($networkAdapter.Name)" -ForegroundColor Green
         } else {
-            Write-Host "IPv6 successfully disabled for $($activeNetworkAdapter.Name)" -ForegroundColor Green
+            Write-Host "IPv6 successfully disabled for $($networkAdapter.Name)" -ForegroundColor Green
         }
     }
     catch {
@@ -93,7 +93,7 @@ if ($activeNetworkAdapter -and $activeNetworkAdapter -isnot [array]) {
     if (($activeNetworkAdapter | Get-NetAdapterBinding -ComponentID ms_tcpip6).Enabled) {
 
         # Disable IPv6
-        Set-IPv6 -NetworkAdapter $activeNetworkAdapter -Enable $false
+        Set-IPv6 -networkAdapter $activeNetworkAdapter -Enable $false
 
         # Launch the game
         Write-Host 'Launching Helldivers 2...'
@@ -111,7 +111,7 @@ if ($activeNetworkAdapter -and $activeNetworkAdapter -isnot [array]) {
             $processObject = Get-Process $monitoredProcess -ErrorAction SilentlyContinue
             if ($elapsedTime -eq $processTimeout) {
                 Write-Host 'Something went wrong whilst attempting to launch the process' -ForegroundColor Red
-                Set-IPv6 -NetworkAdapter $activeNetworkAdapter -Enable $true
+                Set-IPv6 -networkAdapter $activeNetworkAdapter -Enable $true
                 Start-Sleep -Seconds 5
                 Exit
             }
@@ -141,7 +141,7 @@ if ($activeNetworkAdapter -and $activeNetworkAdapter -isnot [array]) {
         Write-Host 'Cleaning up...'
 
         # Enable IPv6
-        Set-IPv6 -NetworkAdapter $activeNetworkAdapter -Enable $true
+        Set-IPv6 -networkAdapter $activeNetworkAdapter -Enable $true
 
         Start-Sleep -Seconds 5
     }
