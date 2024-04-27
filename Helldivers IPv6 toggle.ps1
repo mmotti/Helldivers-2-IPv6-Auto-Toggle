@@ -15,7 +15,7 @@ Function Set-IPv6 {
 
     # This function will enable or disable IPv6 depending on the state of the $Enable bool
     # Admin access is required to be able to change this setting
-    Try {
+    try {
         $networkAdapter | Set-NetAdapterBinding -ComponentID ms_tcpip6 -Enabled $Enable -ErrorAction Stop
         if ($Enable) {
             Write-Host "IPv6 successfully enabled for $($networkAdapter.Name)" -ForegroundColor Green
@@ -25,7 +25,7 @@ Function Set-IPv6 {
     }
     catch {
         throw 'An error occurred whilst attempting to change the state of IPv6.'
-    
+        Exit 1
     }
 }
 
@@ -82,7 +82,7 @@ if (!([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]
     Write-Host 'Administrator privileges are required to change the state of IPv6.' -ForegroundColor Red
     Write-Host 'Please re-run the script as Administrator' -ForegroundColor Red
     Start-Sleep -Seconds 5
-    Exit
+    Exit 1
 }
 
 # Get the active network adapter
@@ -114,7 +114,7 @@ if ($activeNetworkAdapter -and $activeNetworkAdapter -isnot [array]) {
                 Write-Host 'Something went wrong whilst attempting to launch the process' -ForegroundColor Red
                 Set-IPv6 -networkAdapter $activeNetworkAdapter -Enable $true
                 Start-Sleep -Seconds 5
-                Exit
+                Exit 1
             }
 
             Start-Sleep -Seconds 1
@@ -135,7 +135,7 @@ if ($activeNetworkAdapter -and $activeNetworkAdapter -isnot [array]) {
             New-Shortcut -icon $processObject.Path
         }
 
-        #Wait for the game to exit
+        # Wait for the game to exit
         Write-Host 'Waiting for process to exit...'
         $processObject | Wait-Process
 
@@ -150,7 +150,7 @@ if ($activeNetworkAdapter -and $activeNetworkAdapter -isnot [array]) {
         Write-Host "IPv6 is NOT enabled for $($activeNetworkAdapter.Name)"
         Write-Host 'No action is necessary' -ForegroundColor Green
         Start-Sleep -Seconds 5
-        Exit
+        Exit 0
     }
 }
 # There were either no active network adapters or >1
@@ -159,5 +159,5 @@ else {
     Write-Host "$($activeNetworkAdapter.Count) active Network Adapters were found." -ForegroundColor Red
     Write-Host 'There must be exactly 1 active Network Adapter for this script to function correctly.' -ForegroundColor Red
     Start-Sleep -Seconds 5
-    Exit
+    Exit 1
 }
