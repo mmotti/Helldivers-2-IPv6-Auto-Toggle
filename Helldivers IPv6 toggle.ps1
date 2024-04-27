@@ -67,7 +67,6 @@ Function New-Shortcut {
         # If we get here somehow we won't end the script as it's not critical
         # just makes life easier
         Write-Host 'Something went wrong when trying to create a desktop shortcut' -ForegroundColor Red
-        Write-Host $_.Exception.Message
     }
 }
 
@@ -99,16 +98,18 @@ if ($activeNetworkAdapter -and $activeNetworkAdapter -isnot [array]) {
         # Launch the game
         Write-Host 'Launching Helldivers 2...'
         Start-Process -FilePath "steam://rungameid/553850"
+
+        # Process options
+        $processTimeout = 15
+        $monitoredProcess = 'helldivers2'
         
-        # Keep checking until we detect that the game has launched
-        # with a ~15 second timeout
-        $elapsedTime = 0
-        $timeoutCount = 15
-        $gameProcessName = 'helldivers2'
+       # Keep checking until we detect that the game has launched
+       # with a timeout
+       $elapsedTime = 0
         
         Do { 
-            $gameProcess = Get-Process $gameProcessName -ErrorAction SilentlyContinue
-            if ($elapsedTime -eq $timeoutCount) {
+            $processObject = Get-Process $monitoredProcess -ErrorAction SilentlyContinue
+            if ($elapsedTime -eq $processTimeout) {
                 Write-Host 'Something went wrong whilst attempting to launch the process' -ForegroundColor Red
                 Set-IPv6 -NetworkAdapter $activeNetworkAdapter -Enable $true
                 Start-Sleep -Seconds 5
@@ -118,10 +119,9 @@ if ($activeNetworkAdapter -and $activeNetworkAdapter -isnot [array]) {
             Start-Sleep -Seconds 1
             $elapsedTime++
         }
-        While ($null -eq $gameProcess)
+        While ($null -eq $processObject)
 
         Write-Host "Game launched" -ForegroundColor Green
-
 
         # We'll create a desktop shortcut for the script on first run as it's not particularly 
         # straight forward for end-users to create shortcuts for PowerShell scripts especially if they require
@@ -131,12 +131,12 @@ if ($activeNetworkAdapter -and $activeNetworkAdapter -isnot [array]) {
         # and means that we can grab the icon directly from the game process.
 
         if ($firstRun) {
-            New-Shortcut -icon $gameProcess.Path
+            New-Shortcut -icon $processObject.Path
         }
 
         #Wait for the game to exit
         Write-Host 'Waiting for process to exit...'
-        $gameProcess | Wait-Process
+        $processObject | Wait-Process
 
         Write-Host 'Cleaning up...'
 
