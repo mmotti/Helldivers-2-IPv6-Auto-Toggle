@@ -92,7 +92,7 @@ $activeNetworkAdapter = Get-NetAdapter | Where-Object {$_.Status -eq "Up"}
 # Check that we receive a single active Network Adapter and not an array of > 1
 if ($activeNetworkAdapter -and $activeNetworkAdapter -isnot [array]) {
    
-    Write-Host "Network Adapter found: $($activeNetworkAdapter.Name)" -ForegroundColor Green
+    Write-Host "Network Adapter found: $($activeNetworkAdapter.Name)" -ForegroundColor Yellow
     
     # Check IPv6 is enabled on the network adapter
     if (($activeNetworkAdapter | Get-NetAdapterBinding -ComponentID ms_tcpip6).Enabled) {
@@ -101,7 +101,7 @@ if ($activeNetworkAdapter -and $activeNetworkAdapter -isnot [array]) {
         Set-IPv6 -networkAdapter $activeNetworkAdapter -Enable $false
 
         # Launch the game
-        Write-Host 'Launching Helldivers 2...'
+        Write-Host "Launching $processMonitored..."
         Start-Process $processPath
         
        # Keep checking until we detect that the game has launched
@@ -122,7 +122,7 @@ if ($activeNetworkAdapter -and $activeNetworkAdapter -isnot [array]) {
         }
         While ($null -eq $processObject)
 
-        Write-Host "Game launched" -ForegroundColor Green
+        Write-Host "Process launched" -ForegroundColor Green
 
         # We'll create a desktop shortcut for the script on first run as it's not particularly 
         # straight forward for end-users to create shortcuts for PowerShell scripts especially if they require
@@ -136,8 +136,11 @@ if ($activeNetworkAdapter -and $activeNetworkAdapter -isnot [array]) {
         }
 
         # Wait for the game to exit
-        Write-Host 'Waiting for process to exit...'
+        Write-Host "Waiting for the process to exit..."
         $processObject | Wait-Process
+
+        # Game has exited
+        Write-Host "The $processMonitored process has exited" -ForegroundColor Yellow
 
         Write-Host 'Cleaning up...'
 
