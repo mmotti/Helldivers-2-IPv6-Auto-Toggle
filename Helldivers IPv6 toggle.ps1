@@ -158,9 +158,10 @@ if ($activeNetworkAdapter -and $activeNetworkAdapter -isnot [array]) {
 }
 # There were either no active network adapters or >1
 else {
-    
-    Write-Host "$($activeNetworkAdapter.Count) active Network Adapters were found." -ForegroundColor Red
-    Write-Host 'There must be exactly 1 active Network Adapter for this script to function correctly.' -ForegroundColor Red
+    Write-Host "$($activeNetworkAdapter.Count) 'active' Network Adapters were found." -ForegroundColor Red
+    Write-Host 'This script is unable to function unless there is only 1 active Network Adapter.' -ForegroundColor Red
+    # Show the active network adapters and exit
+    $activeNetworkAdapter
     Start-Sleep -Seconds 5
     Exit 1
 }
