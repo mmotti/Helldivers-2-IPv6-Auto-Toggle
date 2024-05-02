@@ -6,12 +6,12 @@ As of the time of writing (April 2024) Helldivers 2 does not seem to play nicely
 
 ## Instructions
 #### On your first run only:
-1. Verify the integrity of the Helldivers 2 game files and close Steam (exit Steam not just minimise)
+1. Verify the integrity of the Helldivers 2 game files and close Steam (exit Steam not just minimise).
 1. Clone or manually download a copy of this repo and store it somewhere safe.
 1. Run **First run.bat** as Administrator.
 
 #### After the first run:
-Simply use the **HELLDIVERS™ 2 (IPv4)** shortcut on your desktop
+Simply use the **HELLDIVERS™ 2 (IPv4)** shortcut on your desktop.
 
 #### Re-creating the shortcut
 If you need to recreate the shortcut (e.g. if you've moved the location of the script) simply go back to step 3 and the shortcut will be re-generated.
