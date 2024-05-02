@@ -1,12 +1,8 @@
 # Helldivers 2 IPv6 Auto Toggle
-This script will toggle IPv6 automatically when you launch Helldivers 2 through the provided shortcut.
+This script will automatically toggle IPv6 on and off for you when you want to play Helldivers 2. It'll also create a handy shortcut on your desktop.
 
 ## The Helldivers 2 IPv6 problem
 As of the time of writing (April 2024) Helldivers 2 does not seem to play nicely with IPv6 at all and in fact completely removes the ability to play for a lot of players (including myself). It is unclear exactly why; however I have also encountered issues where If I launch the game and try to play with IPv6 enabled, I can't even play after disabling IPv6 again until I verify the integrity of the game files.
-
-## What does this script do?
-In short, it'll automatically toggle IPv6 on and off for you when you want to play Helldivers 2. It'll also create a handy shortcut on your desktop.
-
 
 ## Instructions
 #### On your first run only:
