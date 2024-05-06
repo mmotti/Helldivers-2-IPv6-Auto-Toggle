@@ -3,7 +3,7 @@ This script will automatically toggle IPv6 on and off for you when you want to p
 
 **Update 04/05/2024**
 
-I have resolved my issue by configuring MSS Clamping on my router. It is now possible for me to play Helldivers 2 with IPv6 enabled.
+I have resolved this issue within my Mikrotik router by increasing my vlan101 (PPPoE client interface) MTU from 1500 to 1508 and setting the Max MTU / MRU to 1500 on the PPPoE client itself. I now have an "actual" MTU of 1500 on my PPPoE client instead of 1492 which allows me to play Helldivers without issue.
 
 ## The Helldivers 2 IPv6 problem
 As of the time of writing (April 2024) Helldivers 2 does not seem to play nicely with IPv6 at all and in fact completely removes the ability to play for a lot of players (including myself). It is unclear exactly why; however I have also encountered issues where If I launch the game and try to play with IPv6 enabled, I can't even play after disabling IPv6 again until I verify the integrity of the game files.
